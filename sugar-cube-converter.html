@@ -1,0 +1,98 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sugar Cube Converter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        input, button {
+            padding: 10px;
+            font-size: 1rem;
+        }
+        .cube {
+            width: 40px;
+            height: 40px;
+            background-color: #f5f5f5;
+            border: 2px solid #ccc;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+            display: inline-block;
+            margin: 2px;
+        }
+        .partial {
+            position: relative;
+            overflow: hidden;
+        }
+        .partial::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            background-color: rgba(200,200,200,0.7);
+        }
+        #cubes {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .row {
+            display: flex;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <h1>Sugar to Sugar Cube Converter</h1>
+    <p>Enter grams of sugar:</p>
+    <input type="number" id="grams" placeholder="e.g., 25">
+    <button onclick="convertSugar()">Convert</button>
+
+    <div id="cubes"></div>
+
+    <script>
+        function convertSugar() {
+            const grams = parseFloat(document.getElementById('grams').value);
+            const cubeWeight = 4;
+            const cubeCount = grams / cubeWeight;
+            const fullCubes = Math.floor(cubeCount);
+            const partialCubePercentage = cubeCount - fullCubes;
+
+            const cubesDiv = document.getElementById('cubes');
+            cubesDiv.innerHTML = '';
+
+            let remaining = fullCubes;
+            let rowLength = 1;
+
+            while (remaining > 0) {
+                const row = document.createElement('div');
+                row.classList.add('row');
+                for (let i = 0; i < rowLength && remaining > 0; i++) {
+                    const cube = document.createElement('div');
+                    cube.classList.add('cube');
+                    row.appendChild(cube);
+                    remaining--;
+                }
+                cubesDiv.appendChild(row);
+                rowLength++;
+            }
+
+            if (partialCubePercentage > 0) {
+                const row = document.createElement('div');
+                row.classList.add('row');
+                const partialCube = document.createElement('div');
+                partialCube.classList.add('cube', 'partial');
+                partialCube.style.width = (40 * partialCubePercentage) + 'px';
+                row.appendChild(partialCube);
+                cubesDiv.appendChild(row);
+            }
+        }
+    </script>
+</body>
+</html>
